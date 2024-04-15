@@ -10,32 +10,31 @@ const AuthContextProvider = ({ children }) => {
   const [loggeInUser, setLoggedInUser] = useState({});
   const navigate = useNavigate();
 
-  const getLoggedInUser  = async () => {
+  const getLoggedInUser = async () => {
     try {
-      const response  = await axios.get(`${import.meta.env.VITE_API_URL}/users/profile`, 
-      {
-        headers: {
-          Authorization: `Bearer ${Cookies.get("jwtToken")}`
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/users/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("jwtToken")}`,
+          },
         }
-      });
-      if(response.data.success){
+      );
+      if (response.data.success) {
         setLoggedInUser(response.data.data);
         console.log(response.data.data);
-        if(response.data.data.emailVerified){
-          navigate('/');
+        if (response.data.data.emailVerified) {
+          navigate("/");
+        } else {
+          navigate("/verify-email");
         }
-        else{
-          navigate('/verify-email');
-        }
-      }
-      else{
+      } else {
         console.log(response.data.message);
       }
     } catch (error) {
       console.log(error.message);
     }
-  }
-
+  };
 
   const loginWithEmailAndPassword = async (email, password, fullname) => {
     try {
@@ -44,14 +43,13 @@ const AuthContextProvider = ({ children }) => {
         {
           email,
           password,
-          given_name:fullname,
+          given_name: fullname,
         }
       );
       if (response.data.success) {
         setToken(response.data.data);
         Cookies.set("jwtToken", response.data.data, { path: "/" });
         await getLoggedInUser();
-
       } else {
         console.log(response.data.message);
       }
@@ -67,14 +65,13 @@ const AuthContextProvider = ({ children }) => {
         {
           email,
           password,
-          name:fullname,
+          name: fullname,
         }
       );
       if (response.data.success) {
         setToken(response.data.data);
         Cookies.set("jwtToken", response.data.data, { path: "/" });
         await getLoggedInUser();
-
       } else {
         console.log(response.data.message);
       }
@@ -154,36 +151,40 @@ const AuthContextProvider = ({ children }) => {
 
   const verifyOTP = async (otp) => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/users/verify/mail`, {
-        id:loggeInUser.id,
-        otp:otp,
-      },  {
-        headers: {
-          Authorization: `Bearer ${Cookies.get("jwtToken")}`
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/users/verify/mail`,
+        {
+          id: loggeInUser.id,
+          otp: otp,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("jwtToken")}`,
+          },
         }
-      });
-      if(response.data.success){
-        navigate('/');
-      }
-      else{
+      );
+      if (response.data.success) {
+        navigate("/");
+      } else {
         console.log("Invalid Token");
       }
     } catch (error) {
       console.log(error.message);
     }
-  }
+  };
 
   const logout = async () => {
     try {
-      Cookies.remove('jwtToken');
+      Cookies.remove("jwtToken");
       localStorage.removeItem("code");
       setToken("");
-      navigate('/');
+      setLoggedInUser({});
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
-  }
-  
+  };
+
   const value = {
     loginWithEmailAndPassword,
     signupWithEmailAndPassword,
@@ -192,7 +193,7 @@ const AuthContextProvider = ({ children }) => {
     loggeInUser,
     token,
     verifyOTP,
-    logout
+    logout,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
