@@ -22,12 +22,6 @@ const AuthContextProvider = ({ children }) => {
       );
       if (response.data.success) {
         setLoggedInUser(response.data.data);
-        console.log(response.data.data);
-        if (response.data.data.emailVerified) {
-          navigate("/");
-        } else {
-          navigate("/verify-email");
-        }
       } else {
         console.log(response.data.message);
       }
@@ -36,19 +30,18 @@ const AuthContextProvider = ({ children }) => {
     }
   };
 
-  const loginWithEmailAndPassword = async (email, password, fullname) => {
+  const loginWithEmailAndPassword = async (email, password) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/users/signin`,
         {
           email,
           password,
-          given_name: fullname,
         }
       );
       if (response.data.success) {
-        setToken(response.data.data);
         Cookies.set("jwtToken", response.data.data, { path: "/" });
+        setToken(response.data.data);
         await getLoggedInUser();
       } else {
         console.log(response.data.message);
@@ -69,9 +62,18 @@ const AuthContextProvider = ({ children }) => {
         }
       );
       if (response.data.success) {
-        setToken(response.data.data);
-        Cookies.set("jwtToken", response.data.data, { path: "/" });
-        await getLoggedInUser();
+        if (response.data.data.emailVerified) {
+          await getLoggedInUser();
+          setToken(response.data.data);
+          Cookies.set("jwtToken", response.data.data, { path: "/" });
+          navigate("/");
+        } else {
+          setToken(response.data.data);
+          Cookies.set("jwtToken", response.data.data, { path: "/" });
+          navigate("/verify-email");
+        }
+
+
       } else {
         console.log(response.data.message);
       }
@@ -164,6 +166,7 @@ const AuthContextProvider = ({ children }) => {
         }
       );
       if (response.data.success) {
+        await getLoggedInUser();
         navigate("/");
       } else {
         console.log("Invalid Token");
