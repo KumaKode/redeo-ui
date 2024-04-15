@@ -5,7 +5,7 @@ import CONSTANTS from "../Constants/Constants";
 
 
 const SignUp = () => {
-  const { loginWithEmailAndPassword, loginWithGoogle } =
+  const { signupWithEmailAndPassword, loginWithGoogle } =
     useContext(AuthContext);
 
   const [fullname, setFullName] = useState("");
@@ -14,7 +14,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await loginWithEmailAndPassword(email, password, fullname);
+    await signupWithEmailAndPassword(email, password, fullname);
     setEmail("");
     setPassword("");
   };
@@ -33,7 +33,7 @@ const SignUp = () => {
                     height={100}
                   />
                 </h2>
-                <p className="text-center m-0">
+                <p className="text-center m-0 text-dark">
                   Already have an account? <Link to="/signIn">Sign in</Link>
                 </p>
               </div>

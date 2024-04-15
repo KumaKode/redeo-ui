@@ -60,6 +60,29 @@ const AuthContextProvider = ({ children }) => {
     }
   };
 
+  const signupWithEmailAndPassword = async (email, password, fullname) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/users/signup`,
+        {
+          email,
+          password,
+          name:fullname,
+        }
+      );
+      if (response.data.success) {
+        setToken(response.data.data);
+        Cookies.set("jwtToken", response.data.data, { path: "/" });
+        await getLoggedInUser();
+
+      } else {
+        console.log(response.data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const loginWithGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       const token = tokenResponse.access_token;
@@ -67,8 +90,8 @@ const AuthContextProvider = ({ children }) => {
         await fetchGoogleProfile(token);
       }
     },
-    hosted_domain:"https://sampleredeo-production.up.railway.app",
-    redirect_uri:"https://sampleredeo-production.up.railway.app"
+    // hosted_domain:"https://sampleredeo-production.up.railway.app",
+    // redirect_uri:"https://sampleredeo-production.up.railway.app"
   });
 
   const loginWithLinkedin = async (code) => {
@@ -163,6 +186,7 @@ const AuthContextProvider = ({ children }) => {
   
   const value = {
     loginWithEmailAndPassword,
+    signupWithEmailAndPassword,
     loginWithGoogle,
     loginWithLinkedin,
     loggeInUser,
