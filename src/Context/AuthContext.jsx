@@ -8,6 +8,7 @@ export const AuthContext = createContext();
 const AuthContextProvider = ({ children }) => {
   const [token, setToken] = useState(Cookies.get("jwtToken"));
   const [loggeInUser, setLoggedInUser] = useState({});
+  const [isOTPVerified, setIsOTPVerified] = useState(false);
   const navigate = useNavigate();
 
   const getLoggedInUser = async () => {
@@ -103,7 +104,6 @@ const AuthContextProvider = ({ children }) => {
             code,
           }
         );
-        console.log("Request Send:", code);
         if (response.data.success) {
           setToken(response.data.data);
           Cookies.set("jwtToken", response.data.data, { path: "/" });
@@ -166,6 +166,7 @@ const AuthContextProvider = ({ children }) => {
         }
       );
       if (response.data.success) {
+        setIsOTPVerified(true);
         await getLoggedInUser();
         navigate("/");
       } else {
@@ -196,6 +197,7 @@ const AuthContextProvider = ({ children }) => {
     loggeInUser,
     token,
     verifyOTP,
+    isOTPVerified,
     logout,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

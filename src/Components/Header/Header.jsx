@@ -4,7 +4,7 @@ import { JobContext } from "../../Context/JobContext";
 import { AuthContext } from "../../Context/AuthContext";
 const Header = () => {
   const { handleOpenForm, isSticky, handleOpen } = useContext(JobContext);
-  const { logout} = useContext(AuthContext);
+  const { logout, token } = useContext(AuthContext);
   return (
     <header className="heater-transparent">
       <div
@@ -65,7 +65,7 @@ const Header = () => {
                         <Link to="/aboutPage">About</Link>
                       </li>
                       <li>
-                        <Link to="/jobListPage">Jobs</Link>
+                        <Link to="/jobPage">Jobs</Link>
                       </li>
                       <li>
                         <Link to="/servicePage">Services</Link>
@@ -186,12 +186,13 @@ const Header = () => {
                   >
                     Post Job
                   </Link>
-                  <button
+                  {token && <button
                     onClick={async () => await logout()}
                     className="jm-theme-btn d-none d-lg-block mx-2"
                   >
                     Logout
                   </button>
+                  }
                   <div
                     className="jm-navbar-mobile-sign side-toggle d-lg-none d-inline-block"
                     role="button"

@@ -1,20 +1,37 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import { AuthContext } from "../Context/AuthContext";
 const OTPVerification = () => {
-  const {verifyOTP, loggeInUser} = useContext(AuthContext);
-  const [otp, setOtp] = useState("");
+  const {verifyOTP, isOTPVerified, loggeInUser} = useContext(AuthContext);
+  const [otp, setOtp] = useState(new Array(6).fill(""));
+  const inputRefs = useRef([]);
 
-  const handleChange = (e) => {
-    const {value, maxLength} = e.target;
-    const number = value.slice(0, maxLength);
-    setOtp((prevState) => prevState + number );
+  const handleChange = (e, index) => {
+    const { value } = e.target;
+    if (value.length > 1) return;
+    
+    const newOTP = [...otp];
+    newOTP[index] = value;
+    setOtp(newOTP);
+
+    if (value !== '') {
+      const nextIndex = index < 5 ? index + 1 : index;
+      inputRefs.current[nextIndex].focus();
+    }
+  }
+
+  const  handleBackSpace = (e, index) => {
+    if(e.key === "Backspace" && !e.target.value && index > 0){
+      inputRefs.current[index - 1].focus()
+    }
   }
 
   const handleSubmit = async (e) =>{
     e.preventDefault();
-    console.log(otp);
-    await verifyOTP(otp);
-    setOtp("");
+    const enteredOTP = otp.join('');
+    await verifyOTP(enteredOTP);
+    if(isOTPVerified){
+      setOtp(new Array(6).fill(""));
+    }
 
   }
   return (
@@ -34,12 +51,13 @@ const OTPVerification = () => {
               </p>
               <form onSubmit={handleSubmit}>
               <div className="inputs pt-4 pb-2 d-flex gap-3 flex-row justify-content-center align-items-center">
-                  <input className="otp-letter-input" type="text" pattern="[0-9]" maxLength={1} minLength={1}  onChange={handleChange} />
-                  <input className="otp-letter-input" type="text" pattern="[0-9]" maxLength={1} minLength={1}  onChange={handleChange} />
-                  <input className="otp-letter-input" type="text" pattern="[0-9]" maxLength={1} minLength={1}  onChange={handleChange} />
-                  <input className="otp-letter-input" type="text" pattern="[0-9]" maxLength={1} minLength={1}  onChange={handleChange} />
-                  <input className="otp-letter-input" type="text" pattern="[0-9]" maxLength={1} minLength={1}  onChange={handleChange} />
-                  <input className="otp-letter-input" type="text" pattern="[0-9]" maxLength={1} minLength={1}  onChange={handleChange} />
+              {
+                otp.map((digit, index) => (
+    
+                  <input key={index} className="otp-letter-input" type="text" pattern="[0-9]" maxLength={1} minLength={1}  onChange={(e) => handleChange(e, index)} onKeyUp={(e)=> handleBackSpace(e, index)} ref={(ref) => inputRefs.current[index] = ref} />
+                  
+                ))
+              }
                 
               </div>
               <p className="text-muted text-center">
