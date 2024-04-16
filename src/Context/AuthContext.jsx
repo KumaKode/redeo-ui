@@ -64,17 +64,17 @@ const AuthContextProvider = ({ children }) => {
       );
       if (response.data.success) {
         if (response.data.data.emailVerified) {
-          await getLoggedInUser();
           setToken(response.data.data);
           Cookies.set("jwtToken", response.data.data, { path: "/" });
+          await getLoggedInUser();
           navigate("/");
         } else {
+          console.log(loggeInUser);
           setToken(response.data.data);
           Cookies.set("jwtToken", response.data.data, { path: "/" });
+          await getLoggedInUser();
           navigate("/verify-email");
         }
-
-
       } else {
         console.log(response.data.message);
       }
@@ -152,6 +152,7 @@ const AuthContextProvider = ({ children }) => {
   };
 
   const verifyOTP = async (otp) => {
+    console.log(loggeInUser);
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/users/verify/mail`,
