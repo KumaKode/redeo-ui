@@ -9,7 +9,6 @@ const AuthContextProvider = ({ children }) => {
   const [token, setToken] = useState(Cookies.get("jwtToken"));
   const [tempToken, setTempToken] = useState("");
   const [loggeInUser, setLoggedInUser] = useState({});
-  const [isOTPVerified, setIsOTPVerified] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
@@ -29,7 +28,7 @@ const AuthContextProvider = ({ children }) => {
         console.log(response.data.message);
       }
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
   };
 
@@ -192,7 +191,6 @@ const AuthContextProvider = ({ children }) => {
     token,
     tempToken,
     verifyOTP,
-    isOTPVerified,
     logout,
     errorMessage,
   };
