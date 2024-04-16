@@ -7,7 +7,7 @@ import Footer from "../Components/Footer/Footer";
 import { AuthContext } from "../Context/AuthContext";
 
 const HomePage1 = () => {
-  const { loginWithLinkedin } = useContext(AuthContext);
+  const { loginWithLinkedin, getLoggedInUser } = useContext(AuthContext);
 
   const handleLinkedInCallback = async () => {
     const queryString = window.location.search;
@@ -18,8 +18,12 @@ const HomePage1 = () => {
     }
   };
 
+  const invokeUser = async () => {
+    await getLoggedInUser();
+  };
   useEffect(() => {
     handleLinkedInCallback();
+    invokeUser();
   }, []);
   return (
     <>

@@ -7,8 +7,10 @@ export const AuthContext = createContext();
 
 const AuthContextProvider = ({ children }) => {
   const [token, setToken] = useState(Cookies.get("jwtToken"));
+  const [tempToken, setTempToken] = useState("");
   const [loggeInUser, setLoggedInUser] = useState({});
   const [isOTPVerified, setIsOTPVerified] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const getLoggedInUser = async () => {
@@ -63,23 +65,13 @@ const AuthContextProvider = ({ children }) => {
         }
       );
       if (response.data.success) {
-        if (response.data.data.emailVerified) {
-          setToken(response.data.data);
-          Cookies.set("jwtToken", response.data.data, { path: "/" });
-          await getLoggedInUser();
-          navigate("/");
-        } else {
-          console.log(loggeInUser);
-          setToken(response.data.data);
-          Cookies.set("jwtToken", response.data.data, { path: "/" });
-          await getLoggedInUser();
-          navigate("/verify-email");
-        }
+        setTempToken(response.data.data);
+        navigate("/verify-email");
       } else {
-        console.log(response.data.message);
+        console.log(response.data.error.explanation);
       }
     } catch (error) {
-      console.log(error.message);
+      console.log(error.response.data.error.explanation);
     }
   };
 
@@ -152,29 +144,28 @@ const AuthContextProvider = ({ children }) => {
   };
 
   const verifyOTP = async (otp) => {
-    console.log(loggeInUser);
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/users/verify/mail`,
         {
-          id: loggeInUser.id,
           otp: otp,
         },
         {
           headers: {
-            Authorization: `Bearer ${Cookies.get("jwtToken")}`,
+            Authorization: `Bearer ${tempToken}`,
           },
         }
       );
       if (response.data.success) {
-        setIsOTPVerified(true);
+        Cookies.set("jwtToken", tempToken, { path: "/" });
+        setToken(tempToken);
         await getLoggedInUser();
+        setTempToken("");
+        setErrorMessage("");
         navigate("/");
-      } else {
-        console.log("Invalid Token");
       }
     } catch (error) {
-      console.log(error.message);
+      setErrorMessage(error.response.data.error.explanation);
     }
   };
 
@@ -183,6 +174,7 @@ const AuthContextProvider = ({ children }) => {
       Cookies.remove("jwtToken");
       localStorage.removeItem("code");
       setToken("");
+      setTempToken("");
       setLoggedInUser({});
       navigate("/");
     } catch (error) {
@@ -195,11 +187,14 @@ const AuthContextProvider = ({ children }) => {
     signupWithEmailAndPassword,
     loginWithGoogle,
     loginWithLinkedin,
+    getLoggedInUser,
     loggeInUser,
     token,
+    tempToken,
     verifyOTP,
     isOTPVerified,
     logout,
+    errorMessage,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

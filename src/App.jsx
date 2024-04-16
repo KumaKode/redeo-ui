@@ -28,7 +28,7 @@ import OTPVerification from "./Pages/OTPVerification";
 import { useEffect } from "react";
 import { AuthContext } from "./Context/AuthContext";
 function App() {
-  const { token } = useContext(AuthContext);
+  const { token, tempToken } = useContext(AuthContext);
   const ScrollToTop = () => {
     const { pathname } = useLocation();
 
@@ -51,7 +51,7 @@ function App() {
         <Route
           path="/verify-email"
           element={
-            token ? (
+            tempToken ? (
               <OTPVerification />
             ) : (
               <Navigate to="/signup" replace={true} />
