@@ -15,7 +15,12 @@ const OTPVerification = () => {
 
     if (value !== "") {
       const nextIndex = index < 5 ? index + 1 : index;
+      inputRefs.current[nextIndex].value = "";
       inputRefs.current[nextIndex].focus();
+      for (let i = 0; i < nextIndex; i++) {
+        inputRefs.current[i].disabled = true;
+      }
+      
       
     }
     const enteredOTP = [...newOTP.slice(0, index), value].join("");
@@ -28,8 +33,11 @@ const OTPVerification = () => {
 
   const handleBackSpace = (e, index) => {
     if (e.key === "Backspace" && !e.target.value && index > 0) {
+      inputRefs.current[index-1].disabled = false;
       inputRefs.current[index - 1].focus();
       inputRefs.current[index - 1].value = "";
+      otp[index] = "";
+      
     }
   };
 
