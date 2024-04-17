@@ -7,10 +7,23 @@ export const AuthContext = createContext();
 
 const AuthContextProvider = ({ children }) => {
   const [token, setToken] = useState(Cookies.get("jwtToken"));
-  const [tempToken, setTempToken] = useState("");
+  const [tempToken, setTempToken] = useState(null);
   const [loggeInUser, setLoggedInUser] = useState({});
-  const [errorMessage, setErrorMessage] = useState("");
+  const [userEmail, setUserEmail] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
+
+
+  const clearStates = () => {
+    setToken(null);
+    setTempToken(null);
+    setLoggedInUser({});
+    setUserEmail(null);
+    setErrorMessage(null);
+    setLoader(false);
+  };
+  
 
   const getLoggedInUser = async () => {
     try {
@@ -34,6 +47,7 @@ const AuthContextProvider = ({ children }) => {
 
   const loginWithEmailAndPassword = async (email, password) => {
     try {
+      setLoader(true);
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/users/signin`,
         {
@@ -45,16 +59,20 @@ const AuthContextProvider = ({ children }) => {
         Cookies.set("jwtToken", response.data.data, { path: "/" });
         setToken(response.data.data);
         await getLoggedInUser();
+        setLoader(false);
+        setErrorMessage(null);
       } else {
         console.log(response.data.message);
       }
     } catch (error) {
-      console.log(error.message);
+      setLoader(false);
+      setErrorMessage(error.response.data.error.explanation);
     }
   };
 
   const signupWithEmailAndPassword = async (email, password, fullname) => {
     try {
+      setLoader(true);
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/users/signup`,
         {
@@ -65,12 +83,16 @@ const AuthContextProvider = ({ children }) => {
       );
       if (response.data.success) {
         setTempToken(response.data.data);
+        setUserEmail(email);
+        setLoader(false);
+        setErrorMessage(null);
         navigate("/verify-email");
       } else {
         console.log(response.data.error.explanation);
       }
     } catch (error) {
-      console.log(error.response.data.error.explanation);
+      setLoader(false);
+      setErrorMessage(error.response.data.error.explanation);
     }
   };
 
@@ -112,6 +134,7 @@ const AuthContextProvider = ({ children }) => {
 
   const fetchGoogleProfile = async (token) => {
     try {
+    setLoader(true);
       const google_response = await axios.get(
         "https://www.googleapis.com/oauth2/v3/userinfo",
         {
@@ -132,12 +155,14 @@ const AuthContextProvider = ({ children }) => {
           setToken(response.data.data);
           Cookies.set("jwtToken", response.data.data, { path: "/" });
           await getLoggedInUser();
+          setLoader(false);
           navigate("/");
         } else {
           console.log(response.data.message);
         }
       }
     } catch (error) {
+    setLoader(false);
       console.log(error.message);
     }
   };
@@ -159,8 +184,9 @@ const AuthContextProvider = ({ children }) => {
         Cookies.set("jwtToken", tempToken, { path: "/" });
         setToken(tempToken);
         await getLoggedInUser();
-        setTempToken("");
-        setErrorMessage("");
+        setTempToken(null);
+        setErrorMessage(null);
+        setUserEmail(null);
         navigate("/");
       }
     } catch (error) {
@@ -172,9 +198,7 @@ const AuthContextProvider = ({ children }) => {
     try {
       Cookies.remove("jwtToken");
       localStorage.removeItem("code");
-      setToken("");
-      setTempToken("");
-      setLoggedInUser({});
+      clearStates();
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -192,7 +216,9 @@ const AuthContextProvider = ({ children }) => {
     tempToken,
     verifyOTP,
     logout,
+    userEmail,
     errorMessage,
+    loader,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

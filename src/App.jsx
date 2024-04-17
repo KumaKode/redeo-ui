@@ -28,7 +28,7 @@ import OTPVerification from "./Pages/OTPVerification";
 import { useEffect } from "react";
 import { AuthContext } from "./Context/AuthContext";
 function App() {
-  const { token, tempToken } = useContext(AuthContext);
+  const { token, tempToken, getLoggedInUser } = useContext(AuthContext);
   const ScrollToTop = () => {
     const { pathname } = useLocation();
 
@@ -38,6 +38,13 @@ function App() {
 
     return null;
   };
+
+  const invokeUser = async () => {
+    token && await getLoggedInUser();
+  };
+  useEffect(() => {
+    invokeUser();
+  }, []);
 
   return (
     <>

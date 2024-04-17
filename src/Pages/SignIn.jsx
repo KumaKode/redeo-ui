@@ -1,11 +1,12 @@
 import { useContext, useState } from "react";
+import Spinner from 'react-bootstrap/Spinner';
 import { AuthContext } from "../Context/AuthContext";
 import { Link } from "react-router-dom";
 import CONSTANTS from "../Constants/Constants";
 
 
 const SignIn = () => {
-  const { loginWithEmailAndPassword, loginWithGoogle } =
+  const { loginWithEmailAndPassword, loginWithGoogle, loader } =
     useContext(AuthContext);
 
   const [email, setEmail] = useState("");
@@ -113,8 +114,9 @@ const SignIn = () => {
                           <button
                             className="btn btn-lg signin-btn   fs-6"
                             type="submit"
+                            disabled={loader}
                           >
-                            Sign in
+                            {loader ? (<Spinner animation="border" variant="light" size="sm" />) : "Sign in"}
                           </button>
                         </div>
                       </div>
@@ -145,6 +147,7 @@ const SignIn = () => {
                     <button
                       onClick={loginWithGoogle}
                       className="btn bsb-btn-2xl d-flex align-items-center"
+                      
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -172,7 +175,7 @@ const SignIn = () => {
                         ></path>
                       </svg>
                       <span className="ms-2 fs-6 flex-grow-1">
-                        Continue with Google
+                      {"Continue with Google"}
                       </span>
                     </button>
                     <a

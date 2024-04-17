@@ -1,7 +1,7 @@
 import { useState, useContext, useRef } from "react";
 import { AuthContext } from "../Context/AuthContext";
 const OTPVerification = () => {
-  const { verifyOTP, loggeInUser, errorMessage } = useContext(AuthContext);
+  const { verifyOTP, errorMessage, userEmail } = useContext(AuthContext);
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const inputRefs = useRef([]);
 
@@ -50,8 +50,8 @@ const OTPVerification = () => {
               </p>
               <p className="text-muted text-center  mx-sm-2 mx-md-auto mx-lg-auto">
                 {`We have sent a verification code to your email addressl ${
-                  loggeInUser.email &&
-                  loggeInUser.email.slice(0, 3) + "*****@gmail.com"
+                  userEmail &&
+                  userEmail.slice(0, 3) + "*****@gmail.com"
                 } . Please check your inbox  for an email from us containing the OTP`}
               </p>
               <form onSubmit={handleSubmit}>
