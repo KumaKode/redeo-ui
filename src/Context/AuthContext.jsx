@@ -12,6 +12,7 @@ const AuthContextProvider = ({ children }) => {
   const [userEmail, setUserEmail] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loader, setLoader] = useState(false);
+  const [googleLoader, setGoogleLoader] = useState(false);
   const navigate = useNavigate();
 
 
@@ -140,7 +141,7 @@ const AuthContextProvider = ({ children }) => {
 
   const fetchGoogleProfile = async (token) => {
     try {
-    setLoader(true);
+    setGoogleLoader(true);
       const google_response = await axios.get(
         "https://www.googleapis.com/oauth2/v3/userinfo",
         {
@@ -161,14 +162,14 @@ const AuthContextProvider = ({ children }) => {
           setToken(response.data.data);
           Cookies.set("jwtToken", response.data.data, { path: "/" });
           await getLoggedInUser();
-          setLoader(false);
+          setGoogleLoader(false);
           navigate("/");
         } else {
           console.log(response.data.message);
         }
       }
     } catch (error) {
-    setLoader(false);
+      setGoogleLoader(false);
       console.log(error.message);
     }
   };
@@ -226,6 +227,8 @@ const AuthContextProvider = ({ children }) => {
     userEmail,
     errorMessage,
     loader,
+    googleLoader
+    
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

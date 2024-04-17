@@ -6,7 +6,7 @@ import CONSTANTS from "../Constants/Constants";
 
 
 const SignUp = () => {
-  const { signupWithEmailAndPassword, loginWithGoogle, loader, errorMessage } =
+  const { signupWithEmailAndPassword, loginWithGoogle, loader, errorMessage, token,googleLoader } =
     useContext(AuthContext);
 
   const [fullname, setFullName] = useState("");
@@ -16,8 +16,12 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await signupWithEmailAndPassword(email, password, fullname);
-    setEmail("");
+    if(token){
+      setFullName("");
+      setEmail("");
+    }
     setPassword("");
+
   };
 
   return (
@@ -166,7 +170,7 @@ const SignUp = () => {
                     <button
                       onClick={loginWithGoogle}
                       className="btn bsb-btn-2xl d-flex align-items-center"
-                      
+                      disabled={googleLoader}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -194,7 +198,7 @@ const SignUp = () => {
                         ></path>
                       </svg>
                       <span className="ms-2 fs-6 flex-grow-1">
-                      {"Continue with Google"}
+                      {googleLoader ? (<Spinner animation="border" variant="success" size="sm"/>) : "Continue with Google"}
                       </span>
                     </button>
                     <a
