@@ -23,6 +23,10 @@ const AuthContextProvider = ({ children }) => {
     setErrorMessage(null);
     setLoader(false);
   };
+
+  const clearErrors = () => {
+    setTimeout(() => setErrorMessage(null), 3000);
+  };
   
 
   const getLoggedInUser = async () => {
@@ -67,6 +71,7 @@ const AuthContextProvider = ({ children }) => {
     } catch (error) {
       setLoader(false);
       setErrorMessage(error.response.data.error.explanation);
+      clearErrors();
     }
   };
 
@@ -93,6 +98,7 @@ const AuthContextProvider = ({ children }) => {
     } catch (error) {
       setLoader(false);
       setErrorMessage(error.response.data.error.explanation);
+      clearErrors();
     }
   };
 
@@ -191,6 +197,7 @@ const AuthContextProvider = ({ children }) => {
       }
     } catch (error) {
       setErrorMessage(error.response.data.error.explanation);
+      clearErrors();
     }
   };
 

@@ -6,7 +6,7 @@ import CONSTANTS from "../Constants/Constants";
 
 
 const SignUp = () => {
-  const { signupWithEmailAndPassword, loginWithGoogle, loader } =
+  const { signupWithEmailAndPassword, loginWithGoogle, loader, errorMessage } =
     useContext(AuthContext);
 
   const [fullname, setFullName] = useState("");
@@ -44,6 +44,7 @@ const SignUp = () => {
             <div className="col-12 col-lg-10 col-xl-8">
               <div className="row gy-5 justify-content-center">
                 <div className="col-12 col-lg-5">
+                {errorMessage && (<p className="text-center text-danger">{errorMessage}</p>)}
                   <form onSubmit={handleSubmit}>
                     <div className="row gy-3 overflow-hidden">
                     <div className="col-12">
