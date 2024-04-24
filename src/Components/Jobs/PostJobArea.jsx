@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const PostJobArea = () => {
@@ -77,7 +77,7 @@ const PostJobArea = () => {
                 <a href="#" className="jm-job-acc mr-15">
                   Sign Up
                 </a>
-                If you don't have any account. Please create a new
+                If you dont have any account. Please create a new
               </p>
             </div>
           </div>

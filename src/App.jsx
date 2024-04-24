@@ -27,6 +27,7 @@ import SignUp from "./Pages/SignUp";
 import OTPVerification from "./Pages/OTPVerification";
 import { useEffect } from "react";
 import { AuthContext } from "./Context/AuthContext";
+import EditProfile from "./Pages/EditProfile";
 function App() {
   const { token, tempToken, getLoggedInUser } = useContext(AuthContext);
   const ScrollToTop = () => {
@@ -69,6 +70,7 @@ function App() {
           path="/signup"
           element={token ? <Navigate to="/" replace={true} /> : <SignUp />}
         />
+        <Route path="/profile" element={ token ? ( <EditProfile />) : <Navigate to="/signin" replace={true} />}/>
         <Route path="/homePage2" element={<HomePage2 />} />
         <Route path="/jobPage" element={<JobPage />} />
         <Route path="/jobListPage" element={<JobListPage />} />

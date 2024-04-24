@@ -41,6 +41,9 @@ const SingleCandidate = () => {
                     <i className="fa-light fa-phone-flip"></i>
                   </Link>
                 </div>
+                <div className="jm-edit-profile-btn d-flex justify-content-center mt-4">
+                  <Link to="/profile" className="edit-profil-link-btn">Edit Profile</Link>
+                </div>
               </div>
               <div className="jm-proffessional-skills-portion">
                 <h4 className="jm-candidate-profile-overview-title">

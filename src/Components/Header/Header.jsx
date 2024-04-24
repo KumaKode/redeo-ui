@@ -1,10 +1,14 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { JobContext } from "../../Context/JobContext";
 import { AuthContext } from "../../Context/AuthContext";
 const Header = () => {
   const { handleOpenForm, isSticky, handleOpen } = useContext(JobContext);
-  const { logout, token } = useContext(AuthContext);
+  const { logout, token, loggeInUser } = useContext(AuthContext);
+  const [toggleDropdown, setToggleDropdown] = useState(false);
+  const handleDopdown = () => {
+    setToggleDropdown(!toggleDropdown);
+  };
   return (
     <header className="heater-transparent">
       <div
@@ -70,7 +74,7 @@ const Header = () => {
                       <li>
                         <Link to="/servicePage">Services</Link>
                       </li>
-                      
+
                       {/* <li>
                         <Link to="/serviceDetailsPage">Services Details</Link>
                       </li> */}
@@ -177,21 +181,55 @@ const Header = () => {
                   >
                     <i className="fal fa-search"></i>
                   </Link>
-                  <Link to="/candidateDetailsPage" className="jm-user">
-                    <i className="fal fa-user"></i>
+                  {
+                    token && (
+                      <Link to="#" className="jm-user">
+                    <button className="jm-user-btn" onClick={handleDopdown}>
+                      <i className="fal fa-user"></i>
+                    </button>
+                    {toggleDropdown && (
+                      <>
+                        <div className="triangle"></div>
+                        <div className="user-profile-dropdown">
+                          <div className="profile-menu-links">
+                            <ul>
+                            <li><h5 className="w-100 px-3 pt-3">Welcome, {loggeInUser.name}</h5></li>
+                              <li>
+                                <Link to="candidateDetailsPage">
+                                <i className="fa-duotone fa-file"></i>
+                                  My Profile
+                                </Link>
+                              </li>
+                              <li>
+                                <Link to="#">
+                                <i className="fal fa-bookmark"></i>
+                                  My Jobs
+                                </Link>
+                              </li>
+                            </ul>
+                            <button onClick={() =>  logout()} className="logout-btn">
+                            <i className="fas fa-arrow-right-from-bracket"></i>
+                              Logout
+                            </button>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </Link>
-                  <Link
-                    to="/postJobPage"
-                    className="jm-theme-btn d-none d-lg-block"
-                  >
-                    Post Job
+                    )
+                  }
+                  {
+                    !token && <Link to="/signin" className="jm-theme-btn d-none d-lg-block">
+                    Sign in
                   </Link>
-                  {token && <button
-                    onClick={async () => await logout()}
-                    className="jm-theme-btn d-none d-lg-block mx-2"
-                  >
-                    Logout
-                  </button>
+                  }
+                  {
+                    token && <Link
+                  to="/postJobPage"
+                  className="jm-theme-btn jm-theme-btn-1 d-none d-lg-block"
+                >
+                  Post Job
+                </Link>
                   }
                   <div
                     className="jm-navbar-mobile-sign side-toggle d-lg-none d-inline-block"

@@ -5,6 +5,7 @@ const CONSTANTS = {
   }&redirect_uri=${
     LINKEDIN_CALLBACK_URL
   }&scope=profile%20email%20openid`,
+  clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID
 };
 
 export default CONSTANTS;

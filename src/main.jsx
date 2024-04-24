@@ -13,11 +13,12 @@ import "rc-slider/assets/index.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ToastContainer } from "react-toastify";
 import AuthContextProvider from "./Context/AuthContext";
+import CONSTANTS from "./Constants/Constants";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Router>
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <GoogleOAuthProvider clientId={CONSTANTS.clientId}>
         <AuthContextProvider>
           <JobContextProvider>
             <ToastContainer

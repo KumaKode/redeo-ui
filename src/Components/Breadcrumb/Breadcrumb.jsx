@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Breadcrumb = ({topic,topicSpan}) => {
   return (
     <section className="breadcrumb-height bg-default jm-breadcrumb-area align-items-center d-flex pt-100">
