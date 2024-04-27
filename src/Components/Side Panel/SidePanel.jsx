@@ -13,7 +13,7 @@ const SidePanel = () => {
             <div className="col-xl-6 col-8">
               <div className="jm-sidebar-logo">
                 <Link to="/">
-                  <img src="assets/img/logo/logowhite.png" alt="logo-img" />
+                  <img src="/static/assets/img/logo/logowhite.png" alt="logo-img" />
                 </Link>
               </div>
             </div>

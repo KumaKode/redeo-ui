@@ -5,7 +5,10 @@ const CONSTANTS = {
   }&redirect_uri=${
     LINKEDIN_CALLBACK_URL
   }&scope=profile%20email%20openid`,
-  clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID
+  clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+  SETTING_TABS:["General Information", "Education and Training", "Work Experience", "Social Links", "Professional Skills"],
+  SETTING_TABS_ICOS:["fa-duotone fa-user", "fa-duotone fa-graduation-cap","fa-solid fa-briefcase", "fa-duotone fa-share-nodes", "fa-duotone fa-lightbulb-on"],
+
 };
 
 export default CONSTANTS;

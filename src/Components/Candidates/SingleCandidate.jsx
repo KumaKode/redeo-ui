@@ -42,7 +42,7 @@ const SingleCandidate = () => {
                   </Link>
                 </div>
                 <div className="jm-edit-profile-btn d-flex justify-content-center mt-4">
-                  <Link to="/profile" className="edit-profil-link-btn">Edit Profile</Link>
+                  <Link to="/account/update" className="profile-edit-link-btn">Edit Profile</Link>
                 </div>
               </div>
               <div className="jm-proffessional-skills-portion">

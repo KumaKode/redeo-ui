@@ -6,7 +6,7 @@ const Header = () => {
   const { handleOpenForm, isSticky, handleOpen } = useContext(JobContext);
   const { logout, token, loggeInUser } = useContext(AuthContext);
   const [toggleDropdown, setToggleDropdown] = useState(false);
-  const handleDopdown = () => {
+  const handleDropdown = () => {
     setToggleDropdown(!toggleDropdown);
   };
   return (
@@ -52,7 +52,7 @@ const Header = () => {
                 <div className="jm-header-logo">
                   <Link className="jm-logo" to="/">
                     <img
-                      src="static/assets/img/logo/logo.png"
+                      src="/static/assets/img/logo/logo.png"
                       alt="Image Not Fouund"
                     />
                   </Link>
@@ -184,7 +184,7 @@ const Header = () => {
                   {
                     token && (
                       <Link to="#" className="jm-user">
-                    <button className="jm-user-btn" onClick={handleDopdown}>
+                    <button className="jm-user-btn" onClick={handleDropdown}>
                       <i className="fal fa-user"></i>
                     </button>
                     {toggleDropdown && (

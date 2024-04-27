@@ -1,7 +1,7 @@
 const ProfileSection = () => {
   return (
     <div className="card edit-profile-card">
-      <div className="card-body pb-5">
+      <div className="card-body w-100 pb-5">
         <div className="container">
           <div className="row card-title pt-4">
             <div className="col">
